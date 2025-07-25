@@ -1,0 +1,34 @@
+.admin-nav {
+  padding: 2rem;
+  border-radius: 1rem;
+  margin-top: 1rem;
+  color: white;
+}
+
+.status-select {
+  width: 0 !important;
+  border-radius: 12px !important;
+}
+
+/* product creator */
+
+.image-preview {
+  width: 20rem;
+  height: 20rem;
+  object-fit: cover;
+}
+
+.keen-slider {
+  display: flex;
+  flex-direction: row;
+}
+
+.keen-slider__slide {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.container_layout {
+  background: #00000024;
+}
