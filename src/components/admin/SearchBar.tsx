@@ -20,14 +20,14 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch, onAdd }) => {
         placeholder="Búsqueda rápida..."
         value={query}
         onChange={(e) => setQuery(e.target.value)}
-        bg="#2e5166"
+        bg="#262f41"
         color="white"
-        borderRadius="full"
+        borderRadius="8px"
       />
       <Button variant="outline" color="white" borderColor="white" onClick={handleSearch}>
         Buscar
       </Button>
-      <Button leftIcon={<AddIcon />} bg="#1a2e40" color="white" _hover={{ bg: '#24394d' }} onClick={onAdd}>
+      <Button leftIcon={<AddIcon />} bg="#aa8203" color="white" _hover={{ bg: '#c09409' }} onClick={onAdd}>
         Agregar
       </Button>
     </HStack>
