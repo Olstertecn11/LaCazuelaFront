@@ -14,6 +14,12 @@ const Bebida: React.FC = () => {
   const [bebidas, setBebidas] = useState<Bebida[]>([]);
   const toast = useToast();
 
+
+
+
+
+
+
   const { values: bebida, handleChange, reset } = useForm<Bebida>({
     id_bebida: 0,
     id_tipo_bebida: 0,
@@ -55,19 +61,23 @@ const Bebida: React.FC = () => {
   };
 
   const columns = [
-    { header: 'ID', accessor: 'idCatalogo' },
-    { header: 'Nombre', accessor: 'nombre' },
-    { header: 'Descripción', accessor: 'descripcion' },
-    { header: 'Estado', accessor: 'estaActivo', render: (value: boolean) => value ? 'Activo' : 'Inactivo' },
+    { header: 'ID', accessor: 'idBebida' },
+    { header: 'Tipo Bebida', accessor: 'tipoBebida', render: (value: any) => value.itemNombre },
+    { header: 'Tamaño', accessor: 'tamanio', render: (value: any) => value.itemNombre },
+    { header: 'Endulzante', accessor: 'endulzante', render: (value: any) => value.itemNombre },
+    { header: 'Topping', accessor: 'topping', render: (value: any) => value.itemNombre },
+    { header: 'Precio', accessor: 'precio', render: (value: any) => `Q.${value.toFixed(2)}` },
+    { header: 'Inventario', accessor: 'inventario' },
   ];
 
-  const fetchCatalogos = async () => {
+  const fetchBebidas = async () => {
     const { data, error } = await getBebidas();
+    console.log('Bebidas:', data);
     if (!error) setBebidas(data ?? []);
   };
 
   React.useEffect(() => {
-    fetchCatalogos();
+    fetchBebidas();
   }, []);
 
   return (
@@ -75,13 +85,13 @@ const Bebida: React.FC = () => {
       <VStack mx={'6rem'} mt={'2rem'}>
         <SearchBar onSearch={() => console.log('buscar')} onAdd={() => setIsOpen(true)} />
         <Divider orientation="vertical" mx={4} />
-        <DataTable columns={columns} data={bebidas} title="Catálogos" />
+        <DataTable columns={columns} data={bebidas} title="Bebidas" />
       </VStack>
 
       <Modal
         isOpen={isOpen}
         onClose={() => { setIsOpen(false); reset(); }}
-        title="Nuevo Catálogo"
+        title="Nueva Bebida"
         onSave={handleSave}
       >
         <VStack spacing={4} align="stretch">
