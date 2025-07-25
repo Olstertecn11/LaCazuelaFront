@@ -18,6 +18,7 @@ const Pagination: React.FC<PaginationProps> = ({ totalPages, currentPage, pagina
         onClick={() => paginate(1)}
         disabled={currentPage === 1}
         fontSize={'.8rem'}
+        size={'sm'}
         colorScheme="customYellow"
       >
         Inicio
@@ -26,6 +27,7 @@ const Pagination: React.FC<PaginationProps> = ({ totalPages, currentPage, pagina
         onClick={() => paginate(currentPage - 1)}
         disabled={currentPage === 1}
         fontSize={'.8rem'}
+        size={'sm'}
         colorScheme="customYellow"
       >
         Anterior
@@ -37,6 +39,7 @@ const Pagination: React.FC<PaginationProps> = ({ totalPages, currentPage, pagina
             key={index}
             onClick={() => paginate(index + 1)}
             isActive={currentPage === index + 1}
+            size={'sm'}
             fontSize={'.8rem'}
             colorScheme="customYellow"
           >
@@ -48,6 +51,7 @@ const Pagination: React.FC<PaginationProps> = ({ totalPages, currentPage, pagina
       <Button
         onClick={() => paginate(currentPage + 1)}
         disabled={currentPage === totalPages}
+        size={'sm'}
         fontSize={'.8rem'}
         colorScheme="customYellow"
       >
@@ -56,6 +60,7 @@ const Pagination: React.FC<PaginationProps> = ({ totalPages, currentPage, pagina
       <Button
         onClick={() => paginate(totalPages)}
         disabled={currentPage === totalPages}
+        size={'sm'}
         fontSize={'.8rem'}
         colorScheme="customYellow"
       >

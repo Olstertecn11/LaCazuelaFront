@@ -3,35 +3,38 @@ import { Divider, VStack, Input, Textarea } from '@chakra-ui/react';
 import Modal from '@/components/admin/Modal';
 import SearchBar from '@/components/admin/SearchBar';
 import DataTable from '@/components/admin/DataTable';
-import { getCatalogos, createCatalogo } from '@/services/CatalogoService';
-import type { Catalogo } from '@/types/Catalogo';
+import { getBebidas, createBebida } from '@/services/BebidaService';
+import type { Bebida } from '@/types/Bebida';
 import { useForm } from '@/hooks/useForm';
-import { CatalogoAdapter } from '@/adpters/catalogo';
+import { BebidaAdapter } from '@/adpters/bebida';
 import { useToast } from '@chakra-ui/react';
 
-const Catalogo: React.FC = () => {
+const Bebida: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [catalogos, setCatalogos] = useState<Catalogo[]>([]);
+  const [bebidas, setBebidas] = useState<Bebida[]>([]);
   const toast = useToast();
 
-  const { values: catalogo, handleChange, reset } = useForm<Catalogo>({
-    id_catalogo: 0,
-    nombre: '',
-    descripcion: '',
-    esta_activo: true,
+  const { values: bebida, handleChange, reset } = useForm<Bebida>({
+    id_bebida: 0,
+    id_tipo_bebida: 0,
+    id_tamanio_fk: 0,
+    id_endulzante_fk: 0,
+    id_topping_fk: 0,
+    precio: 0,
+    inventario: 0,
   });
 
   const handleSave = () => {
-    createCatalogo(CatalogoAdapter(catalogo))
+    createBebida(BebidaAdapter(bebida))
       .then((response) => {
         console.log(response);
         if (response.data) {
-          setCatalogos((prev) => [...prev, response.data]);
+          setBebidas((prev) => [...prev, response.data]);
           setIsOpen(false);
           reset();
 
           toast({
-            title: 'Catálogo creado',
+            title: 'Bebida creada',
             description: 'El catálogo se ha creado correctamente.',
             status: 'success',
             duration: 3000,
@@ -39,7 +42,7 @@ const Catalogo: React.FC = () => {
         }
       })
       .catch((error) => {
-        console.error('Error al crear el catálogo:', error);
+        console.error('Error al crear el bebida:', error);
         toast({
           title: 'Error al crear el catálogo',
           description: 'Error al crear el catálogo.',
@@ -59,8 +62,8 @@ const Catalogo: React.FC = () => {
   ];
 
   const fetchCatalogos = async () => {
-    const { data, error } = await getCatalogos();
-    if (!error) setCatalogos(data ?? []);
+    const { data, error } = await getBebidas();
+    if (!error) setBebidas(data ?? []);
   };
 
   React.useEffect(() => {
@@ -72,7 +75,7 @@ const Catalogo: React.FC = () => {
       <VStack mx={'6rem'} mt={'2rem'}>
         <SearchBar onSearch={() => console.log('buscar')} onAdd={() => setIsOpen(true)} />
         <Divider orientation="vertical" mx={4} />
-        <DataTable columns={columns} data={catalogos} title="Catálogos" />
+        <DataTable columns={columns} data={bebidas} title="Catálogos" />
       </VStack>
 
       <Modal
@@ -82,15 +85,10 @@ const Catalogo: React.FC = () => {
         onSave={handleSave}
       >
         <VStack spacing={4} align="stretch">
-          <label htmlFor="nombre">Nombre</label>
-          <Input id="nombre" name="nombre" value={catalogo.nombre} onChange={handleChange} color="white" placeholder="Tamaños Bebida" />
-
-          <label htmlFor="descripcion">Descripción</label>
-          <Textarea id="descripcion" name="descripcion" value={catalogo.descripcion} onChange={handleChange} color="white" placeholder="Catálogo de tamaños de bebida" />
         </VStack>
       </Modal>
     </>
   );
 };
 
-export default Catalogo;
+export default Bebida;

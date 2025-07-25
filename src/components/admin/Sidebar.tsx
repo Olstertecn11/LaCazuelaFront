@@ -128,7 +128,7 @@ const Sidebar: React.FC<SidebarProps> = ({ toggleSidebar }) => {
                 w="100%"
                 fontWeight={'normal'}
               >
-                <Box flex="1" textAlign="left" display="flex" alignItems="center" fontSize={14} onClick={() => redirect('/admin/producto/visualizar')}>
+                <Box flex="1" textAlign="left" display="flex" alignItems="center" fontSize={14} onClick={() => redirect('/productos/bebidas')}>
                   <Fa6.FaGlassWater style={{ marginRight: '8px' }} fontSize={10} />
                   Bebidas
                 </Box>

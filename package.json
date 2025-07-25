@@ -15,6 +15,7 @@
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
     "@vitejs/plugin-react": "^4.7.0",
+    "axios": "^1.11.0",
     "framer-motion": "^12.23.9",
     "path": "^0.12.7",
     "react": "^19.1.0",

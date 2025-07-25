@@ -1,6 +1,6 @@
 const constants = {
-  API_URL: import.meta.env.VITE_API_URL,
   APP_NAME: import.meta.env.VITE_APP_NAME,
+  API_URL: import.meta.env.VITE_API_URL,
 
   CATALOGO_BEBIDAS: Number(import.meta.env.VITE_CATALOGO_BEBIDAS),
   CATALOGO_MASA: Number(import.meta.env.VITE_CATALOGO_MASA),
