@@ -32,6 +32,7 @@ const AdminLayout: React.FC<React.PropsWithChildren> = ({ children }) => {
           flex="1"
           ml={isSidebarOpen ? "250px" : "0"}
           p={4}
+          bg='#00000024'
           className="container_layout"
           minH="100vh"
           transition="margin-left 0.3s ease"

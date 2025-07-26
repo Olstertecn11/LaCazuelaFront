@@ -29,6 +29,12 @@
   align-items: center;
 }
 
-.container_layout {
-  background: #00000024;
+.container_layout,
+#container_layout {
+  background: #00000024 !important;
+}
+
+option {
+  background: #5c3f1e !important;
+  color: white !important;
 }

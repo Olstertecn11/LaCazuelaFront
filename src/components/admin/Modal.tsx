@@ -17,11 +17,12 @@ interface ModalProps {
   title?: string;
   children: React.ReactNode;
   onSave?: () => void;
+  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl';
 }
 
-const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, children, onSave }) => {
+const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, children, onSave, size = 'md' }) => {
   return (
-    <ChakraModal isOpen={isOpen} onClose={onClose} isCentered>
+    <ChakraModal size={size} isOpen={isOpen} onClose={onClose} isCentered>
       <ModalOverlay />
       <ModalContent bg="#5c3f1e" color="white">
         {title && <ModalHeader>{title}</ModalHeader>}

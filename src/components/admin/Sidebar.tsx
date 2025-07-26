@@ -25,7 +25,7 @@ interface SidebarProps {
 
 const Sidebar: React.FC<SidebarProps> = ({ toggleSidebar }) => {
 
-  const bg = useColorModeValue('#FB942B', '#aa8203');
+  const bg = useColorModeValue('#aa8203', '#aa8203');
   const color = useColorModeValue('gray.900', 'gray.100');
   const history = useNavigate();
 

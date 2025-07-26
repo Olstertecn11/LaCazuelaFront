@@ -1,15 +1,12 @@
-import { useState } from "react";
+import { useState } from 'react';
 
 export function useForm<T extends object>(initialValues: T) {
   const [values, setValues] = useState<T>(initialValues);
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const { name, value } = e.target;
+  const handleChange = (field: keyof T, value: string | number) => {
     setValues((prev) => ({
       ...prev,
-      [name]: value,
+      [field]: value,
     }));
   };
 
