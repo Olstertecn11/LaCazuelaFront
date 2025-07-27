@@ -116,7 +116,7 @@ const Sidebar: React.FC<SidebarProps> = ({ toggleSidebar }) => {
                 w="100%"
                 fontWeight={'normal'}
               >
-                <Box flex="1" textAlign="left" display="flex" alignItems="center" fontSize={14} onClick={() => redirect('/admin/producto/nuevo')}>
+                <Box flex="1" textAlign="left" display="flex" alignItems="center" fontSize={14} onClick={() => redirect('/productos/tamales')}>
                   <Fa6.FaBowlFood style={{ marginRight: '8px' }} fontSize={10} />
                   Tamales
                 </Box>
@@ -170,19 +170,6 @@ const Sidebar: React.FC<SidebarProps> = ({ toggleSidebar }) => {
                   Lista
                 </Box>
               </Button>
-              <Button
-                variant="ghost"
-                colorScheme="white"
-                justifyContent="flex-start"
-                w="100%"
-                fontWeight={'normal'}
-              >
-                <Box flex="1" textAlign="left" display="flex" alignItems="center" fontSize={14} onClick={() => redirect('/admin/categoria/visualizar')}>
-                  <FaListAlt style={{ marginRight: '8px' }} fontSize={10} />
-                  List
-                </Box>
-              </Button>
-
             </AccordionPanel>
           </AccordionItem>
 

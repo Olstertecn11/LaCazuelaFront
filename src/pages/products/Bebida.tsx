@@ -79,18 +79,16 @@ const Bebida: React.FC = () => {
   const handleSave = () => {
     createBebida(BebidaAdapter(bebida))
       .then((response) => {
-        console.log(response);
         if (response.data) {
-          setBebidas((prev) => [...prev, response.data]);
           setIsOpen(false);
           reset();
-
           toast({
             title: 'Bebida creada',
             description: 'El catálogo se ha creado correctamente.',
             status: 'success',
             duration: 3000,
-          })
+          });
+          fetchBebidas(); // ✅ Refetch con relaciones completas
         }
       })
       .catch((error) => {
@@ -100,10 +98,8 @@ const Bebida: React.FC = () => {
           description: 'Error al crear el catálogo.',
           status: 'error',
           duration: 3000,
-        })
+        });
       });
-    setIsOpen(false);
-    reset();
   };
 
   const columns = [
@@ -118,7 +114,6 @@ const Bebida: React.FC = () => {
 
   const fetchBebidas = async () => {
     const { data, error } = await getBebidas();
-    console.log('Bebidas:', data);
     if (!error) setBebidas(data ?? []);
   };
 
@@ -147,7 +142,7 @@ const Bebida: React.FC = () => {
             <VStack spacing={4} align="stretch">
               <label htmlFor="">Tipo de bebida</label>
               <Select
-                value={mibebida.id_tipo_bebida}
+                value={bebida.id_tipo_bebida}
                 onChange={(e) => handleChange('id_tipo_bebida', parseInt(e.target.value))}
               >
                 <option value="">Seleccione un tipo de bebida</option>
@@ -161,7 +156,7 @@ const Bebida: React.FC = () => {
             <VStack spacing={4} align="stretch">
               <label htmlFor="">Tamaño de bebida</label>
               <Select
-                value={mibebida.id_tamanio_fk}
+                value={bebida.id_tamanio_fk}
                 onChange={(e) => handleChange('id_tamanio_fk', parseInt(e.target.value))}
               >
                 <option value="">Seleccione un tamaño de bebida</option>
@@ -179,7 +174,7 @@ const Bebida: React.FC = () => {
 
               <label htmlFor="">Endulzante</label>
               <Select
-                value={mibebida.id_endulzante_fk}
+                value={bebida.id_endulzante_fk}
                 onChange={(e) => handleChange('id_endulzante_fk', parseInt(e.target.value))}
               >
                 <option value="">Seleccione un endulzante</option>
@@ -193,7 +188,7 @@ const Bebida: React.FC = () => {
             <VStack spacing={4} align="stretch">
               <label htmlFor="">Topping</label>
               <Select
-                value={mibebida.id_topping_fk}
+                value={bebida.id_topping_fk}
                 onChange={(e) => handleChange('id_topping_fk', parseInt(e.target.value))}
               >
                 <option value="">Seleccione el topping</option>
@@ -212,7 +207,7 @@ const Bebida: React.FC = () => {
               <Input
                 type="number"
                 placeholder="Precio"
-                value={mibebida.precio}
+                value={bebida.precio}
                 onChange={(e) => handleChange('precio', parseFloat(e.target.value))}
               />
             </VStack>
@@ -221,7 +216,7 @@ const Bebida: React.FC = () => {
               <Input
                 type="number"
                 placeholder="Inventario"
-                value={mibebida.inventario}
+                value={bebida.inventario}
                 onChange={(e) => handleChange('inventario', parseInt(e.target.value))}
               />
             </VStack>

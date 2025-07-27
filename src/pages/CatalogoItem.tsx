@@ -3,29 +3,33 @@ import { Divider, HStack, Icon, VStack, Input, Button, Textarea } from '@chakra-
 import Modal from '@/components/admin/Modal';
 import SearchBar from '@/components/admin/SearchBar';
 import DataTable from '@/components/admin/DataTable';
-import { getCatalogos, createCatalogo } from '@/services/CatalogoService';
-import type { Catalogo } from '@/types/Catalogo';
+import type { CatalogoItem } from '@/types/CatalogoItem';
 import { useForm } from '@/hooks/useForm';
-import { CatalogoAdapter } from '@/adpters/catalogo';
+import { CatalogoItemAdapter } from '@/adpters/catalogo_item';
 import { useToast } from '@chakra-ui/react';
 import * as Fa6 from 'react-icons/fa6';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { createCatalogoItem, getCatalogoItemByParentId } from '@/services/CatalogoItemService';
 
-const Catalogo: React.FC = () => {
+const CatalogoItem: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [catalogos, setCatalogos] = useState<Catalogo[]>([]);
+  const [catalogos, setCatalogos] = useState<CatalogoItem[]>([]);
   const toast = useToast();
   const history = useNavigate();
+  const { state } = useLocation();
+  const id_catalogo = state?.id_catalogo || 0;
 
-  const { values: catalogo, handleChange, reset } = useForm<Catalogo>({
+  const { values: catalogo, handleChange, reset } = useForm<CatalogoItem>({
+    id_catalogo_item: 0,
     id_catalogo: 0,
-    nombre: '',
+    item_nombre: '',
     descripcion: '',
-    esta_activo: true,
+    esta_activo: true
   });
 
   const handleSave = () => {
-    createCatalogo(CatalogoAdapter(catalogo))
+
+    createCatalogoItem(CatalogoItemAdapter(catalogo, id_catalogo))
       .then((response) => {
         console.log(response);
         if (response.data) {
@@ -55,14 +59,14 @@ const Catalogo: React.FC = () => {
   };
 
   const columns = [
-    { header: 'ID', accessor: 'idCatalogo' },
-    { header: 'Nombre', accessor: 'nombre' },
+    { header: 'ID', accessor: 'idCatalogoItem' },
+    { header: 'Nombre', accessor: 'itemNombre' },
     { header: 'Descripción', accessor: 'descripcion' },
     { header: 'Estado', accessor: 'estaActivo', render: (value: boolean) => value ? 'Activo' : 'Inactivo' },
   ];
 
   const fetchCatalogos = async () => {
-    const { data, error } = await getCatalogos();
+    const { data, error } = await getCatalogoItemByParentId(id_catalogo);
     if (!error) setCatalogos(data ?? []);
   };
 
@@ -75,13 +79,7 @@ const Catalogo: React.FC = () => {
       <VStack mx={'6rem'} mt={'2rem'}>
         <SearchBar onSearch={() => console.log('buscar')} onAdd={() => setIsOpen(true)} />
         <Divider orientation="vertical" mx={4} />
-        <DataTable columns={columns} data={catalogos} title="Catálogos" renderActions={(item) => {
-          return (
-            <HStack spacing={1}>
-              <Button title="Ver Items" onClick={() => history('/catalogo_item/index', { state: { id_catalogo: item.idCatalogo } })} ><Icon as={Fa6.FaListUl} /></Button>
-            </HStack>
-          )
-        }} />
+        <DataTable columns={columns} data={catalogos} title="Catálogos" />
       </VStack >
 
       <Modal
@@ -92,13 +90,13 @@ const Catalogo: React.FC = () => {
       >
         <VStack spacing={4} align="stretch">
           <label htmlFor="nombre">Nombre</label>
-          <Input id="nombre" name="nombre" value={catalogo.nombre} onChange={handleChange} color="white" placeholder="Tamaños Bebida" />
+          <Input id="nombre" name="item_nombre" value={catalogo.item_nombre} onChange={handleChange} color="white" placeholder="Atol de elote" />
           <label htmlFor="descripcion">Descripción</label>
-          <Textarea id="descripcion" name="descripcion" value={catalogo.descripcion} onChange={handleChange} color="white" placeholder="Catálogo de tamaños de bebida" />
+          <Textarea id="descripcion" name="descripcion" value={catalogo.descripcion} onChange={handleChange} color="white" placeholder="Atol del tipo de elote" />
         </VStack>
       </Modal>
     </>
   );
 };
 
-export default Catalogo;
+export default CatalogoItem;
