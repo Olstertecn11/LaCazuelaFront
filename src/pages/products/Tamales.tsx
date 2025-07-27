@@ -3,34 +3,25 @@ import { Divider, HStack, Select, VStack, Input, Textarea } from '@chakra-ui/rea
 import Modal from '@/components/admin/Modal';
 import SearchBar from '@/components/admin/SearchBar';
 import DataTable from '@/components/admin/DataTable';
-import { getBebidas, createBebida } from '@/services/BebidaService';
+import { getTamales, createTamal } from '@/services/TamalService';
 import { getCatalogoItemByParentId } from '@/services/CatalogoItemService';
-import type { Bebida } from '@/types/Bebida';
+import type { Tamal } from '@/types/Tamal';
 import { useForm } from '@/hooks/useForm';
-import { BebidaAdapter } from '@/adpters/bebida';
+import { TamalAdapter } from '@/adpters/tamal';
 import constants from '@/config/constants';
 import { useToast } from '@chakra-ui/react';
 
-const Tamales: React.FC = () => {
+const Bebida: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [bebidas, setBebidas] = useState<Bebida[]>([]);
+  const [tamales, setTamales] = useState<Tamal[]>([]);
 
-  const [mibebida, setBebida] = useState<Bebida>({
-    id_bebida: 0,
-    id_tipo_bebida: 0,
-    id_tamanio_fk: 0,
-    id_endulzante_fk: 0,
-    id_topping_fk: 0,
-    precio: 0,
-    inventario: 0,
-  });
   const toast = useToast();
 
   const [catalogoTipos, setCatalogoTipos] = useState<any>({
-    tipos_bebidas: [],
-    tamanios: [],
-    endulzantes: [],
-    toppings: []
+    masas: [],
+    rellenos: [],
+    envolturas: [],
+    picantes: []
   });
 
 
@@ -38,25 +29,26 @@ const Tamales: React.FC = () => {
   const fetchTipos = async () => {
     const safeData = (result: any) => result?.data ?? [];
 
-    const [tipos_bebidas, tamanios, endulzantes, toppings] = await Promise.allSettled([
-      getCatalogoItemByParentId(constants.CATALOGO_BEBIDAS),
-      getCatalogoItemByParentId(constants.CATALOGO_TAMANIO_BEBIDA),
-      getCatalogoItemByParentId(constants.CATALOGO_ENDULZANTE),
-      getCatalogoItemByParentId(constants.CATALOGO_TOPPINGS),
+    const [masas, rellenos, envolturas, picantes] = await Promise.allSettled([
+      getCatalogoItemByParentId(constants.CATALOGO_MASA),
+      getCatalogoItemByParentId(constants.CATALOGO_RELLENO),
+      getCatalogoItemByParentId(constants.CATALOGO_ENVOLTURA),
+      getCatalogoItemByParentId(constants.CATALOGO_PICANTE),
     ]);
 
     setCatalogoTipos({
-      tipos_bebidas: tipos_bebidas.status === 'fulfilled' ? safeData(tipos_bebidas.value) : [],
-      tamanios: tamanios.status === 'fulfilled' ? safeData(tamanios.value) : [],
-      endulzantes: endulzantes.status === 'fulfilled' ? safeData(endulzantes.value) : [],
-      toppings: toppings.status === 'fulfilled' ? safeData(toppings.value) : [],
+      masas: masas.status === 'fulfilled' ? safeData(masas.value) : [],
+      rellenos: rellenos.status === 'fulfilled' ? safeData(rellenos.value) : [],
+      envolturas: envolturas.status === 'fulfilled' ? safeData(envolturas.value) : [],
+      picantes: picantes.status === 'fulfilled' ? safeData(picantes.value) : [],
     });
 
     // Log any rejected promises for debugging
-    if (tipos_bebidas.status === 'rejected') console.error('Error fetching tipos_bebidas:', tipos_bebidas.reason);
-    if (tamanios.status === 'rejected') console.error('Error fetching tamanios:', tamanios.reason);
-    if (endulzantes.status === 'rejected') console.error('Error fetching endulzantes:', endulzantes.reason);
-    if (toppings.status === 'rejected') console.error('Error fetching toppings:', toppings.reason);
+    if (masas.status === 'rejected') console.error('Error fetching tipos_bebidas:', masas.reason);
+    if (rellenos.status === 'rejected') console.error('Error fetching tamanios:', rellenos.reason);
+    if (envolturas.status === 'rejected') console.error('Error fetching envolturas:', envolturas.reason);
+    if (picantes.status === 'rejected') console.error('Error fetching toppings:', picantes.reason);
+
   };
 
 
@@ -66,33 +58,33 @@ const Tamales: React.FC = () => {
 
 
 
-  const { values: bebida, handleChange, reset } = useForm<Bebida>({
-    id_bebida: 0,
-    id_tipo_bebida: 0,
-    id_tamanio_fk: 0,
-    id_endulzante_fk: 0,
-    id_topping_fk: 0,
+  const { values: tamal, handleChange, reset } = useForm<Tamal>({
+    id_tamal: 0,
+    id_tipo_masa_fk: 0,
+    id_relleno_fk: 0,
+    id_envoltura_fk: 0,
+    id_nivel_picante: 0,
     precio: 0,
-    inventario: 0,
+    inventario: 0
   });
 
   const handleSave = () => {
-    createBebida(BebidaAdapter(bebida))
+    createTamal(TamalAdapter(tamal))
       .then((response) => {
         if (response.data) {
           setIsOpen(false);
           reset();
           toast({
-            title: 'Bebida creada',
+            title: 'Tamal creado',
             description: 'El catálogo se ha creado correctamente.',
             status: 'success',
             duration: 3000,
           });
-          fetchBebidas(); // ✅ Refetch con relaciones completas
+          fetchTamales(); // ✅ Refetch con relaciones completas
         }
       })
       .catch((error) => {
-        console.error('Error al crear el bebida:', error);
+        console.error('Error al crear el tamal:', error);
         toast({
           title: 'Error al crear el catálogo',
           description: 'Error al crear el catálogo.',
@@ -103,22 +95,22 @@ const Tamales: React.FC = () => {
   };
 
   const columns = [
-    { header: 'ID', accessor: 'idBebida' },
-    { header: 'Tipo Bebida', accessor: 'tipoBebida', render: (value: any) => value.itemNombre },
-    { header: 'Tamaño', accessor: 'tamanio', render: (value: any) => value.itemNombre },
-    { header: 'Endulzante', accessor: 'endulzante', render: (value: any) => value.itemNombre },
-    { header: 'Topping', accessor: 'topping', render: (value: any) => value.itemNombre },
-    { header: 'Precio', accessor: 'precio', render: (value: any) => `Q.${value.toFixed(2)}` },
+    { header: 'ID', accessor: 'idTamal' },
+    { header: 'Tipo de Masa', accessor: 'tipoMasa', render: (value: any) => value?.itemNombre },
+    { header: 'Relleno', accessor: 'relleno', render: (value: any) => value?.itemNombre },
+    { header: 'Envoltura', accessor: 'envoltura', render: (value: any) => value?.itemNombre },
+    { header: 'Nivel Picante', accessor: 'nivelPicante', render: (value: any) => value?.itemNombre },
+    { header: 'Precio', accessor: 'precio', render: (value: any) => `Q.${value?.toFixed(2)}` },
     { header: 'Inventario', accessor: 'inventario' },
   ];
 
-  const fetchBebidas = async () => {
-    const { data, error } = await getBebidas();
-    if (!error) setBebidas(data ?? []);
+  const fetchTamales = async () => {
+    const { data, error } = await getTamales();
+    if (!error) setTamales(data ?? []);
   };
 
   React.useEffect(() => {
-    fetchBebidas();
+    fetchTamales();
     fetchTipos();
   }, []);
 
@@ -127,7 +119,7 @@ const Tamales: React.FC = () => {
       <VStack mx={'6rem'} mt={'2rem'}>
         <SearchBar onSearch={() => console.log('buscar')} onAdd={() => setIsOpen(true)} />
         <Divider orientation="vertical" mx={4} />
-        <DataTable columns={columns} data={bebidas} title="Tamales" />
+        <DataTable columns={columns} data={tamales} title="Tamales" />
       </VStack>
 
       <Modal
@@ -140,13 +132,13 @@ const Tamales: React.FC = () => {
         <VStack spacing={4} align="stretch">
           <HStack>
             <VStack spacing={4} align="stretch">
-              <label htmlFor="">Tipo de bebida</label>
+              <label htmlFor="">Tipo de masas</label>
               <Select
-                value={bebida.id_tipo_bebida}
-                onChange={(e) => handleChange('id_tipo_bebida', parseInt(e.target.value))}
+                value={tamal.id_tipo_masa_fk}
+                onChange={(e) => handleChange('id_tipo_masa_fk', parseInt(e.target.value))}
               >
-                <option value="">Seleccione un tipo de bebida</option>
-                {catalogoTipos.tipos_bebidas && catalogoTipos.tipos_bebidas.map((tipo: any) => (
+                <option value="">Seleccione un tipo de masa</option>
+                {catalogoTipos.masas && catalogoTipos.masas.map((tipo: any) => (
                   <option key={tipo.idCatalogoItem} value={tipo.idCatalogoItem}>
                     {tipo.itemNombre}
                   </option>
@@ -154,13 +146,13 @@ const Tamales: React.FC = () => {
               </Select>
             </VStack>
             <VStack spacing={4} align="stretch">
-              <label htmlFor="">Tamaño de bebida</label>
+              <label htmlFor="">Tipos de relleno</label>
               <Select
-                value={bebida.id_tamanio_fk}
-                onChange={(e) => handleChange('id_tamanio_fk', parseInt(e.target.value))}
+                value={tamal.id_relleno_fk}
+                onChange={(e) => handleChange('id_relleno_fk', parseInt(e.target.value))}
               >
-                <option value="">Seleccione un tamaño de bebida</option>
-                {catalogoTipos.tamanios && catalogoTipos.tamanios.map((tipo: any) => (
+                <option value="">Seleccione un tipo de relleno</option>
+                {catalogoTipos.rellenos && catalogoTipos.rellenos.map((tipo: any) => (
                   <option key={tipo.idCatalogoItem} value={tipo.idCatalogoItem}>
                     {tipo.itemNombre}
                   </option>
@@ -172,13 +164,13 @@ const Tamales: React.FC = () => {
           <HStack>
             <VStack spacing={4} align="stretch">
 
-              <label htmlFor="">Endulzante</label>
+              <label htmlFor="">Envoltura</label>
               <Select
-                value={bebida.id_endulzante_fk}
-                onChange={(e) => handleChange('id_endulzante_fk', parseInt(e.target.value))}
+                value={tamal.id_envoltura_fk}
+                onChange={(e) => handleChange('id_envoltura_fk', parseInt(e.target.value))}
               >
-                <option value="">Seleccione un endulzante</option>
-                {catalogoTipos.endulzantes && catalogoTipos.endulzantes.map((tipo: any) => (
+                <option value="">Seleccione una envoltura</option>
+                {catalogoTipos.envolturas && catalogoTipos.envolturas.map((tipo: any) => (
                   <option key={tipo.idCatalogoItem} value={tipo.idCatalogoItem}>
                     {tipo.itemNombre}
                   </option>
@@ -186,13 +178,13 @@ const Tamales: React.FC = () => {
               </Select>
             </VStack>
             <VStack spacing={4} align="stretch">
-              <label htmlFor="">Topping</label>
+              <label htmlFor="">Nivel Picante</label>
               <Select
-                value={bebida.id_topping_fk}
-                onChange={(e) => handleChange('id_topping_fk', parseInt(e.target.value))}
+                value={tamal.id_nivel_picante}
+                onChange={(e) => handleChange('id_nivel_picante', parseInt(e.target.value))}
               >
-                <option value="">Seleccione el topping</option>
-                {catalogoTipos.toppings && catalogoTipos.toppings.map((tipo: any) => (
+                <option value="">Seleccione el nievl de picante</option>
+                {catalogoTipos.picantes && catalogoTipos.picantes.map((tipo: any) => (
                   <option key={tipo.idCatalogoItem} value={tipo.idCatalogoItem}>
                     {tipo.itemNombre}
                   </option>
@@ -207,7 +199,7 @@ const Tamales: React.FC = () => {
               <Input
                 type="number"
                 placeholder="Precio"
-                value={bebida.precio}
+                value={tamal.precio}
                 onChange={(e) => handleChange('precio', parseFloat(e.target.value))}
               />
             </VStack>
@@ -216,7 +208,7 @@ const Tamales: React.FC = () => {
               <Input
                 type="number"
                 placeholder="Inventario"
-                value={bebida.inventario}
+                value={tamal.inventario}
                 onChange={(e) => handleChange('inventario', parseInt(e.target.value))}
               />
             </VStack>
@@ -227,4 +219,4 @@ const Tamales: React.FC = () => {
   );
 };
 
-export default Tamales;
+export default Bebida;
