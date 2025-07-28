@@ -189,7 +189,7 @@ const Sidebar: React.FC<SidebarProps> = ({ toggleSidebar }) => {
                 w="100%"
                 fontWeight={'normal'}
               >
-                <Box flex="1" textAlign="left" display="flex" alignItems="center" fontSize={14} onClick={() => redirect('/admin/pedidos/visualizar')}>
+                <Box flex="1" textAlign="left" display="flex" alignItems="center" fontSize={14} onClick={() => redirect('/venta/index')}>
                   <Fa6.FaMoneyBill1Wave style={{ marginRight: '8px' }} fontSize={10} />
                   Realizar Venta
                 </Box>
