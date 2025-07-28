@@ -7,5 +7,5 @@ export const BebidaAdapter = (bebida: Bebida) => ({
   idEndulzanteFk: bebida.id_endulzante_fk,
   idToppingFk: bebida.id_topping_fk,
   precio: bebida.precio,
-  inventario: bebida.inventario,
+  inventario: 0
 });

@@ -5,5 +5,5 @@ export const TamalAdapter = (tamal: Tamal) => ({
   idEnvolturaFk: tamal.id_envoltura_fk,
   idNivelPicante: tamal.id_nivel_picante,
   precio: tamal.precio,
-  inventario: tamal.inventario,
+  inventario: 0,
 });

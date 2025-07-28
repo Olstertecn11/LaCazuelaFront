@@ -7,5 +7,5 @@ export interface Tamal {
   id_nivel_picante: number;
   precio: number;
   inventario: number;
-  count?: number
+  cantidad?: number
 }

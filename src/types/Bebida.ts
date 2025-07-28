@@ -6,4 +6,5 @@ export interface Bebida {
   id_topping_fk: number;
   precio: number;
   inventario: number;
+  cantidad?: number;
 }

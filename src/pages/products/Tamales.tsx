@@ -100,8 +100,7 @@ const Bebida: React.FC = () => {
     { header: 'Relleno', accessor: 'relleno', render: (value: any) => value?.itemNombre },
     { header: 'Envoltura', accessor: 'envoltura', render: (value: any) => value?.itemNombre },
     { header: 'Nivel Picante', accessor: 'nivelPicante', render: (value: any) => value?.itemNombre },
-    { header: 'Precio', accessor: 'precio', render: (value: any) => `Q.${value?.toFixed(2)}` },
-    { header: 'Inventario', accessor: 'inventario' },
+    { header: 'Precio', accessor: 'precio', render: (value: any) => `Q.${value?.toFixed(2)}` }
   ];
 
   const fetchTamales = async () => {
@@ -201,15 +200,6 @@ const Bebida: React.FC = () => {
                 placeholder="Precio"
                 value={tamal.precio}
                 onChange={(e) => handleChange('precio', parseFloat(e.target.value))}
-              />
-            </VStack>
-            <VStack spacing={4} align="stretch">
-              <label htmlFor="">Inventario</label>
-              <Input
-                type="number"
-                placeholder="Inventario"
-                value={tamal.inventario}
-                onChange={(e) => handleChange('inventario', parseInt(e.target.value))}
               />
             </VStack>
           </HStack>

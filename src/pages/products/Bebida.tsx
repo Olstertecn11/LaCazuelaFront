@@ -15,15 +15,6 @@ const Bebida: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [bebidas, setBebidas] = useState<Bebida[]>([]);
 
-  const [mibebida, setBebida] = useState<Bebida>({
-    id_bebida: 0,
-    id_tipo_bebida: 0,
-    id_tamanio_fk: 0,
-    id_endulzante_fk: 0,
-    id_topping_fk: 0,
-    precio: 0,
-    inventario: 0,
-  });
   const toast = useToast();
 
   const [catalogoTipos, setCatalogoTipos] = useState<any>({
@@ -109,7 +100,6 @@ const Bebida: React.FC = () => {
     { header: 'Endulzante', accessor: 'endulzante', render: (value: any) => value.itemNombre },
     { header: 'Topping', accessor: 'topping', render: (value: any) => value.itemNombre },
     { header: 'Precio', accessor: 'precio', render: (value: any) => `Q.${value.toFixed(2)}` },
-    { header: 'Inventario', accessor: 'inventario' },
   ];
 
   const fetchBebidas = async () => {
@@ -209,15 +199,6 @@ const Bebida: React.FC = () => {
                 placeholder="Precio"
                 value={bebida.precio}
                 onChange={(e) => handleChange('precio', parseFloat(e.target.value))}
-              />
-            </VStack>
-            <VStack spacing={4} align="stretch">
-              <label htmlFor="">Inventario</label>
-              <Input
-                type="number"
-                placeholder="Inventario"
-                value={bebida.inventario}
-                onChange={(e) => handleChange('inventario', parseInt(e.target.value))}
               />
             </VStack>
           </HStack>
