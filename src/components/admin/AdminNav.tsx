@@ -33,9 +33,12 @@ const AdminNav: React.FC<AdminNavProps> = ({ toggleSidebar, isSidebarOpen }) => 
   const history = useNavigate();
   const location = useLocation();
   const colors = { pink: 'pink.500', green: 'teal.500', blue: 'blue.400', red: 'red.400', yellow: 'yellow.400', base: '#aa8203' };
-  const [bgColor, setBgColor] = React.useState<string>(colors.pink)
+  const [bgColor, setBgColor] = React.useState<string>(colors.base)
 
   const closeSession = async () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    history('/login');
   };
 
   const getColor = (route: String) => {
@@ -120,8 +123,8 @@ const AdminNav: React.FC<AdminNavProps> = ({ toggleSidebar, isSidebarOpen }) => 
                   </Center>
                   <br />
                   <MenuDivider />
-                  <MenuItem onClick={() => console.log('config')}>Configuración</MenuItem>
-                  <MenuItem onClick={closeSession}>Salir</MenuItem>
+                  <MenuItem background='yellow.600' _hover={{ background: 'yellow.500' }} onClick={() => console.log('config')}>Configuración</MenuItem>
+                  <MenuItem background='yellow.600' _hover={{ background: 'yellow.500' }} onClick={closeSession}>Salir</MenuItem>
                 </MenuList>
               </Menu>
             </Stack>
