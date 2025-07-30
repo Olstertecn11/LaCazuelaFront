@@ -12,5 +12,7 @@ export const obtenerHistorialVentas = async () =>
 export const obtenerProductosMasVendidos = async () =>
   await handleRequest<any>(() => api.get('/venta/mas-vendidos'));
 
-export const obtenerEstadisticasVentas = async () =>
-  await handleRequest<any>(() => api.get('/venta/estadisticas'));
+export const obtenerDetalleVenta = async (id_venta: number) =>
+  await handleRequest<any>(() => api.get(`/venta/${id_venta}/detalles`));
+
+

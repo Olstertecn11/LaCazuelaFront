@@ -13,6 +13,8 @@ const constants = {
   CATALOGO_TAMANIO_TAMAL: Number(import.meta.env.VITE_CATALOGO_TAMANIO_TAMAL),
   CATALOGO_COMBO: Number(import.meta.env.VITE_CATALOGO_COMBO),
   CATALOGO_EVENTO: Number(import.meta.env.VITE_CATALOGO_EVENTO),
+  TIPO_TAMAL: import.meta.env.VITE_TIPO_TAMAL,
+  TIPO_BEBIDA: import.meta.env.VITE_TIPO_BEBIDA,
 };
 
 export default constants;
