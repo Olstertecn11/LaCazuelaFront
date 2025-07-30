@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Divider, HStack, Icon, VStack, Input, Button, Textarea } from '@chakra-ui/react';
+import { Text, Divider, HStack, Icon, VStack, Input, Button, Textarea } from '@chakra-ui/react';
 import Modal from '@/components/admin/Modal';
 import SearchBar from '@/components/admin/SearchBar';
 import DataTable from '@/components/admin/DataTable';
@@ -17,7 +17,7 @@ const CatalogoItem: React.FC = () => {
   const toast = useToast();
   const history = useNavigate();
   const { state } = useLocation();
-  const id_catalogo = state?.id_catalogo || 0;
+  const catalogoParent = state?.catalogo || { id_catalogo: 0, nombre: '', descripcion: '', esta_activo: true };
 
   const { values: catalogo, handleChange, reset } = useForm<CatalogoItem>({
     id_catalogo_item: 0,
@@ -29,9 +29,8 @@ const CatalogoItem: React.FC = () => {
 
   const handleSave = () => {
 
-    createCatalogoItem(CatalogoItemAdapter(catalogo, id_catalogo))
+    createCatalogoItem(CatalogoItemAdapter(catalogo, catalogoParent.idCatalogo))
       .then((response) => {
-        console.log(response);
         if (response.data) {
           setCatalogos((prev) => [...prev, response.data]);
           setIsOpen(false);
@@ -66,7 +65,7 @@ const CatalogoItem: React.FC = () => {
   ];
 
   const fetchCatalogos = async () => {
-    const { data, error } = await getCatalogoItemByParentId(id_catalogo);
+    const { data, error } = await getCatalogoItemByParentId(catalogoParent.idCatalogo);
     if (!error) setCatalogos(data ?? []);
   };
 
@@ -79,13 +78,13 @@ const CatalogoItem: React.FC = () => {
       <VStack mx={'6rem'} mt={'2rem'}>
         <SearchBar onSearch={() => console.log('buscar')} onAdd={() => setIsOpen(true)} />
         <Divider orientation="vertical" mx={4} />
-        <DataTable columns={columns} data={catalogos} title="Catálogos" />
+        <DataTable columns={columns} data={catalogos} title={`Catalogo ${catalogoParent.nombre}`} />
       </VStack >
 
       <Modal
         isOpen={isOpen}
         onClose={() => { setIsOpen(false); reset(); }}
-        title="Nuevo Catálogo"
+        title={`Nuevo ${catalogoParent.nombre}`}
         onSave={handleSave}
       >
         <VStack spacing={4} align="stretch">

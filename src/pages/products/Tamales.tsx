@@ -71,26 +71,26 @@ const Bebida: React.FC = () => {
   const handleSave = () => {
     createTamal(TamalAdapter(tamal))
       .then((response) => {
-        if (response.data) {
-          setIsOpen(false);
-          reset();
+        if (response.error) {
+          console.error('Error al crear el tamal:', response.error);
           toast({
-            title: 'Tamal creado',
-            description: 'El catálogo se ha creado correctamente.',
-            status: 'success',
+            title: 'Error al crear el catálogo',
+            description: response.error.message || 'Error inesperado.',
+            status: 'error',
             duration: 3000,
           });
-          fetchTamales(); // ✅ Refetch con relaciones completas
+          return;
         }
-      })
-      .catch((error) => {
-        console.error('Error al crear el tamal:', error);
+
+        setIsOpen(false);
+        reset();
         toast({
-          title: 'Error al crear el catálogo',
-          description: 'Error al crear el catálogo.',
-          status: 'error',
+          title: 'Tamal creado',
+          description: 'El catálogo se ha creado correctamente.',
+          status: 'success',
           duration: 3000,
         });
+        fetchTamales();
       });
   };
 

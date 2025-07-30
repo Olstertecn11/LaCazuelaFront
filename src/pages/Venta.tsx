@@ -8,6 +8,7 @@ import type { Tamal } from '@/types/Tamal';
 import type { Bebida } from '@/types/Bebida';
 import { Divider, Input, Select, VStack, HStack, Box, Flex, Text, Button, Icon, useToast } from '@chakra-ui/react';
 import * as Fa6 from 'react-icons/fa6';
+import { crearVenta } from '@/services/VentaService';
 import DataTable from '@/components/admin/DataTable';
 
 
@@ -64,8 +65,9 @@ const Venta = () => {
   };
   const [isOpen, setIsOpen] = React.useState(false);
   const toast = useToast();
+  const user = JSON.parse(localStorage.getItem('user') || '{}');
   const [cart, setCart] = React.useState<Cart>({
-    id_usuario_fk: 1,
+    id_usuario_fk: user.idUsuario,
     items: {
       bebidas: [],
       tamales: []
@@ -179,7 +181,26 @@ const Venta = () => {
       return;
     }
 
+    const productYaExiste = <T extends { [key: string]: any }>(items: T[], nuevos: T[], key: string): boolean => {
+      console.log(items);
+      console.log(nuevos)
+      return nuevos.some(nuevo => items.some(item => item[key] === nuevo[key]));
+    }
+
     if (type == 'bebida') {
+
+      const yaExisteBebida = productYaExiste(cart.items.bebidas, bebidasFiltradas, 'idBebida');
+      if (yaExisteBebida) {
+        toast({
+          title: 'La bebida ya está en el pedido',
+          status: 'warning',
+          duration: 2000,
+          isClosable: true
+        });
+        return;
+      }
+
+
       setCart((prev) => ({
         ...prev,
         items: {
@@ -195,6 +216,17 @@ const Venta = () => {
       }));
     }
     else {
+
+      const yaExisteTamal = productYaExiste(cart.items.tamales, tamalesFiltrados, 'idTamal');
+      if (yaExisteTamal) {
+        toast({
+          title: 'El tamal ya está en el pedido',
+          status: 'warning',
+          duration: 2000,
+          isClosable: true
+        });
+        return;
+      }
       setCart((prev) => ({
         ...prev,
         items: {
@@ -256,8 +288,35 @@ const Venta = () => {
     }
   }
 
-  const makeSale = () => {
-    console.log('Realizando venta con el siguiente pedido:', cart);
+  const makeSale = async () => {
+    console.log(cart);
+    const { data, error } = await crearVenta(cart);
+    if (error) {
+      console.error('Error al crear la venta:', error);
+      toast({
+        title: 'Error al realizar la venta',
+        status: 'error',
+        duration: 3000,
+        isClosable: true
+      });
+      return;
+    }
+
+    setTimeout(() => {
+      console.log('Venta creada:', data);
+      toast({
+        title: 'Venta realizada con éxito',
+        status: 'success',
+        duration: 3000,
+        isClosable: true
+      });
+
+      // reload the page to reset the cart
+      window.location.reload();
+    }, 1000);
+
+
+
   }
 
   return (

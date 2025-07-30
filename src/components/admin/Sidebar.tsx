@@ -194,6 +194,18 @@ const Sidebar: React.FC<SidebarProps> = ({ toggleSidebar }) => {
                   Realizar Venta
                 </Box>
               </Button>
+              <Button
+                variant="ghost"
+                colorScheme="white"
+                justifyContent="flex-start"
+                w="100%"
+                fontWeight={'normal'}
+              >
+                <Box flex="1" textAlign="left" display="flex" alignItems="center" fontSize={14} onClick={() => redirect('/venta/historial')}>
+                  <Fa6.FaRectangleList style={{ marginRight: '8px' }} fontSize={10} />
+                  Historial de Ventas
+                </Box>
+              </Button>
             </AccordionPanel>
           </AccordionItem>
 

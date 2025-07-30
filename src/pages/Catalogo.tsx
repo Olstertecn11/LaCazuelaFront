@@ -78,7 +78,7 @@ const Catalogo: React.FC = () => {
         <DataTable columns={columns} data={catalogos} title="Catálogos" renderActions={(item) => {
           return (
             <HStack spacing={1}>
-              <Button title="Ver Items" onClick={() => history('/catalogo_item/index', { state: { id_catalogo: item.idCatalogo } })} ><Icon as={Fa6.FaListUl} /></Button>
+              <Button title="Ver Items" onClick={() => history('/catalogo_item/index', { state: { catalogo: item } })} ><Icon as={Fa6.FaListUl} /></Button>
             </HStack>
           )
         }} />
